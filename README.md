@@ -1,8 +1,9 @@
 # P-Keeper
 [thepkeeper.wordpress.com](thepkeeper.wordpress.com)
-Respirador artificial para el COVID-19, Artificial respirator for COVID-19
 
-![](/images/pkeeper1.jpeg =300x200)
+## Respirador artificial para el COVID-19, Artificial respirator for COVID-19
+
+![](images/pkeeper1.jpeg)
 # Como Funciona?
 ## Todo respirador debe cumplir con los parametros:
 
@@ -25,3 +26,8 @@ Respirador artificial para el COVID-19, Artificial respirator for COVID-19
 # Como funciona?
 
 El motor paso a paso, mueve por unos engranes y poleas la rueda de transmisión que tiene sujetas las levas de accionamiento que mueven los fuelles, uno sube cuando el otro baja y por ende, uno inyecta aire y el otro lo extrae del paciente, con unos potenciómetros se pueden regular las velocidades y pausas pero a su vez con tan solo un ajuste mecánico en la rueda de transmisión se puede graduar el volumen de aire que se quiere inyectar y extraer del paciente. También posee sistema de bateria de 12v que permiten mantener el funcionamiento por al menos 12hs sin conexión a la red eléctrica.
+
+# Esquema Arduino
+
+![](schematic.png)
+
