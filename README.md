@@ -1,7 +1,8 @@
 # P-Keeper
+[thepkeeper.wordpress.com](thepkeeper.wordpress.com)
 Respirador artificial para el COVID-19, Artificial respirator for COVID-19
-![](images/pkeeper1.jpeg 200x200)
 
+![](/images/pkeeper1.jpeg =300x200)
 # Como Funciona?
 ## Todo respirador debe cumplir con los parametros:
 
