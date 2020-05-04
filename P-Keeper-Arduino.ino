@@ -9,8 +9,9 @@
 int steps = 9;       // pin step 9
 int direccion = 3;   // pin direccion 3
 int potenciometro;   // lectura del potenciometro
+int exalacionVel;
 int potenciometro2; // lectura del potenciometro2
-int botonStart = 6;       // pin pulsador PIN6
+int botonStart = 2;       // pin pulsador PIN6
 int valueBtnStart = 0;
 bool running = false;
 //int boton = 7;       // pin pulsador 7
@@ -26,31 +27,23 @@ void setup() {
   pinMode(direccion, OUTPUT); 
   // inicializamos pin como entrada.
   //pinMode(boton, INPUT);
-  pinMode(botonStart, INPUT);
+  //pinMode(botonStart, INPUT);
+  attachInterrupt(digitalPinToInterrupt(botonStart), iniciarDetener, FALLING);
   // Indicar a la libreria que tenemos conectada una pantalla de 16x2
   lcd.setBacklightPin(3,POSITIVE);	// puerto P3 de PCF8574 como positivo
   lcd.setBacklight(HIGH);		// habilita iluminacion posterior de LCD
   lcd.begin(16, 2);			// 16 columnas por 2 lineas para LCD 1602A
   lcd.clear();			// limpia pantalla
-  lcd.print("thepkeeper"); // Enviar el mensaje
+  lcd.print("The P-Keeper"); // Enviar el mensaje
   lcd.setCursor(0, 1);
   lcd.print(".wordpress.com");
 }
 
-void loop() {
-    valueBtnStart = digitalRead(botonStart);  //lectura digital de pin
-    if (valueBtnStart == LOW) {
-      delay(100);
-      if (valueBtnStart == LOW) {        //control anti Rebote
-        running = !running;             // toggle running variable
-        lcd.clear();
-      }
-    }
-      
+void loop() { 
     if (running == true) {
       analogico0 = analogRead(A0);     // leemos el potenciometro en el puerto A0
       porRetVeloc = map(analogico0, 0, 1024, 100, 0);
-      potenciometro = map(analogico0,0,1024,250,4000);  // adaptamos el valor leido a un retardo 250microSeg y 4000microSeg
+      potenciometro = map(analogico0,0,1024,350,4000);  // adaptamos el valor leido a un retardo 250microSeg y 4000microSeg
       analogico1 = analogRead(A1);     // leemos el potenciometro en el puero A1
       porRetInaExa = map(analogico1, 0, 1024, 0, 100);
       potenciometro2 = map(analogico1,0,1024,300,2500);  // adaptamos el valor leido a un retardo de 0.3 a 2.5seg
@@ -63,6 +56,7 @@ void loop() {
       lcd.setCursor(0, 1);
       lcd.print(porRetInaExa);  // Valor pauda en microsegundo
       lcd.print("% Inhal.Pause");
+      exalacionVel = (potenciometro + 800);
       //INAHALACION
       for (int x = 0; x < 1370 ; x++) {      // 200 pasos para 180° y como tiene un reductor se necesita 1370 pasos para 180°
         digitalWrite(steps, HIGH);         // Aqui generamos un flanco de bajada HIGH - LOW
@@ -76,13 +70,21 @@ void loop() {
         digitalWrite(steps, HIGH);         // Aqui generamos un flanco de bajada HIGH - LOW
         delayMicroseconds(5);              // Pequeño retardo para formar el pulso en STEP
         digitalWrite(steps, LOW);         // y el A4988 de avanzara un paso el motor
-        delayMicroseconds((potenciometro + 800)); // generamos un retardo con el valor leido del potenciometro Y LE sumamos 800MICROSEGUNDOS
+        delayMicroseconds(exalacionVel); // generamos un retardo con el valor leido del potenciometro Y LE sumamos 800MICROSEGUNDOS
       }
       delay(potenciometro2); // retardo de inahalacion y exalacion
     }else {
-      lcd.print("thepkeeper"); // Enviar el mensaje
+      lcd.print("The P-Keeper"); // Enviar el mensaje
       lcd.setCursor(0, 1);
       lcd.print(".wordpress.com");
       delay(100);
     }
+}
+
+// ISR pin 2, iniciar detener
+void iniciarDetener()
+{
+  running = !running;             // toggle running variable
+  lcd.clear();
+  delay(500);
 }
