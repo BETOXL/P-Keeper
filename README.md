@@ -36,6 +36,7 @@ El motor paso a paso, mueve por unos engranes y poleas la rueda de transmisión 
 
 ![](schematic.png)
 
+# Tu donacion es importante.
 
 [![MP 50 Donate Button](images/donar50.png)](https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=51834467-b68b30ba-cf1f-4a6f-ab7c-61168bebfa8b)
 

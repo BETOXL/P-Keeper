@@ -11,10 +11,8 @@ int direccion = 3;   // pin direccion 3
 int potenciometro;   // lectura del potenciometro
 int exalacionVel;
 int potenciometro2; // lectura del potenciometro2
-int botonStart = 2;       // pin pulsador PIN6
-int valueBtnStart = 0;
-bool running = false;
-//int boton = 7;       // pin pulsador 7
+const byte interruptPin = 2; //PIN 2 BOTON START
+volatile byte running = LOW;
 int porRetVeloc;
 int porRetInaExa;
 int analogico0;
@@ -25,29 +23,23 @@ void setup() {
   // inicializamos pin como salidas.
   pinMode(steps, OUTPUT); 
   pinMode(direccion, OUTPUT); 
-  // inicializamos pin como entrada.
-  //pinMode(boton, INPUT);
-  //pinMode(botonStart, INPUT);
-  attachInterrupt(digitalPinToInterrupt(botonStart), iniciarDetener, FALLING);
+  pinMode(interruptPin, INPUT);
+  attachInterrupt(digitalPinToInterrupt(interruptPin), iniciarDetener, CHANGE);
   // Indicar a la libreria que tenemos conectada una pantalla de 16x2
   lcd.setBacklightPin(3,POSITIVE);	// puerto P3 de PCF8574 como positivo
   lcd.setBacklight(HIGH);		// habilita iluminacion posterior de LCD
   lcd.begin(16, 2);			// 16 columnas por 2 lineas para LCD 1602A
   lcd.clear();			// limpia pantalla
-  lcd.print("The P-Keeper"); // Enviar el mensaje
-  lcd.setCursor(0, 1);
-  lcd.print(".wordpress.com");
 }
 
 void loop() { 
-    if (running == true) {
+    if (running == HIGH) {
       analogico0 = analogRead(A0);     // leemos el potenciometro en el puerto A0
       porRetVeloc = map(analogico0, 0, 1024, 100, 0);
       potenciometro = map(analogico0,0,1024,350,4000);  // adaptamos el valor leido a un retardo 250microSeg y 4000microSeg
       analogico1 = analogRead(A1);     // leemos el potenciometro en el puero A1
       porRetInaExa = map(analogico1, 0, 1024, 0, 100);
       potenciometro2 = map(analogico1,0,1024,300,2500);  // adaptamos el valor leido a un retardo de 0.3 a 2.5seg
-      //int sentido = digitalRead(boton);    // leemos el boton de direccion
       digitalWrite(direccion, LOW);    // cambiamos de dirección segun pulsador
       //PANTALLA
       lcd.setCursor(0, 0);		// ubica cursor en columna 0 y linea 0
@@ -80,11 +72,8 @@ void loop() {
       delay(100);
     }
 }
-
 // ISR pin 2, iniciar detener
 void iniciarDetener()
 {
   running = !running;             // toggle running variable
-  lcd.clear();
-  delay(500);
 }
